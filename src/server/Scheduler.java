@@ -36,12 +36,29 @@ public class Scheduler {
 		// and notify all threads
 		floorRequests.add(request);
 		isAvailable=false;
-		inProcess=true;
 		onDestination=false;
 		notifyAll();
 
-
-
+	}
+	
+	/**
+	 * the function returns the passenger request to elevator and starts the process 
+	 */
+	
+	public synchronized Passenger getNextRequest() {
+		
+		//while elevator is still available means there is no request that have been made
+		while (isAvailable) {
+            try { 
+                wait();
+            } catch (InterruptedException e) {
+                System.err.println(e);
+            }
+        }
+		
+		Passenger nextPassemger=floorRequests.remove();
+		inProcess=true;
+		return nextPassemger;
 	}
 
 	// lamps [] booleans
@@ -65,7 +82,9 @@ public class Scheduler {
 			}
 		}		
 		return destination;
-	}
+	}	
+	
+	
 	
 	//keeps track where the elevator is, during the process
 	
