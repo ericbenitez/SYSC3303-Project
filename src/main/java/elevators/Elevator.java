@@ -19,6 +19,19 @@ public class Elevator implements Runnable{
     private Object engine = new Object(); // Placeholder datatype for engine
     private Scheduler scheduler; // elevator's communication line with the scheduler
 
+    //Basic getters for some essential elevator attributes
+    public int getNumberOfFloors() {
+        return numberOfFloors;
+    }
+
+    public boolean[] getLamps() {
+        return lamps;
+    }
+
+    public boolean doorStatus() {
+        return doors;
+    }
+
     //Constructor method sets the chosen configuration for the system
     // Future iterations buttonPressed may be a list for multiple floors chosen
     public Elevator(Scheduler scheduler, int highestFloor, int buttonPressed){
