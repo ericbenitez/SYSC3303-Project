@@ -38,7 +38,6 @@ public class Scheduler {
 		isAvailable=false;
 		inProcess=true;
 		onDestination=false;
-		System.out.println(floorRequests);
 		notifyAll();
 
 
