@@ -13,6 +13,30 @@ public class Scheduler {
 		
 	}
 	
+	//function receives request from floor system
+	
+	public void makeFloorRequest(Object request) {
+		
+		//if inProcess is true means elevator is in process and floor has to wait
+		while (inProcess) {
+            try { 
+                wait();
+            } catch (InterruptedException e) {
+                System.err.println(e);
+            }
+        }
+		
+		//after receiving request from floor it adds on queue
+		// make inProcess true
+		// and notify all threads
+		floorRequests.add(request);
+		inProcess=true;
+		notifyAll();
+		
+		
+		
+	}
+	
 	// lamps [] booleans 
 	// iterate through array and find the destination floor
 	// function return destination=-1 if there is no button pressed
