@@ -4,16 +4,16 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Scheduler {
-	private boolean inProcess, isAvailable, onDestination;  			// true means elevator is in process, initially is false until it gets request from floor system
-	private Queue<Object> floorRequests; 	//requests from floor system
-	private int elevatorLocation, destination;
+	private boolean inProcess, isAvailable, onDestination;  		// true means elevator is in process, initially is false until it gets request from floor system
+	private Queue<Object> floorRequests; 							//requests from floor system
+	private int elevatorLocation, destination;						//where elevator is and where is going to
 	
 	public Scheduler () {
 		inProcess=false;
 		isAvailable=true;
 		floorRequests= new LinkedList<>();
 		elevatorLocation=0;
-		destination=-1;
+		destination=-1;			
 		onDestination=false;
 		
 	}
@@ -37,6 +37,7 @@ public class Scheduler {
 		floorRequests.add(request);
 		isAvailable=false;
 		inProcess=true;
+		onDestination=false;
 		notifyAll();
 		
 		
@@ -66,8 +67,13 @@ public class Scheduler {
 		return destination;
 	}
 	
+	//keeps track where the elevator is, during the process
+	
 	public synchronized void sendElevatorUpdates(int level) {
-		while(!inProcess) {
+		
+		// while the elevator is not in process and destination button haven't been pressed yet,
+		//elevator should not be able to send updates 
+		while(!inProcess && destination!=-1) {
 			try { 
                 wait();
             } catch (InterruptedException e) {
@@ -75,6 +81,10 @@ public class Scheduler {
             }
 		}
 		elevatorLocation=level;
+		
+		//if elevatorLocation==destination means that elevator reached the destination
+		//elevator is not longer in process
+		// and elevator is available
 		 if(elevatorLocation==destination) {
 			 onDestination=true;
 			 inProcess=false;
@@ -86,10 +96,12 @@ public class Scheduler {
 		
 	}
 	
+	//sends the location of elevator(the floor level)
 	public int getElevatorUpdates() {
 		return elevatorLocation;
 	}
 	
+	// returns true when elevator reached the destination
 	public boolean isOnDestinatiom() {
 		return onDestination;
 	}
