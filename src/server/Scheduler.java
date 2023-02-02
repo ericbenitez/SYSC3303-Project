@@ -15,7 +15,7 @@ public class Scheduler {
 	
 	//function receives request from floor system
 	
-	public void makeFloorRequest(Object request) {
+	public synchronized void makeFloorRequest(Object request) {
 		
 		//if inProcess is true means elevator is in process and floor has to wait
 		while (inProcess) {
