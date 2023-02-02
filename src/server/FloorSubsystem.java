@@ -17,7 +17,9 @@ public class FloorSubsystem implements Runnable{
     public void run() {
         ArrayList<Passanger> passengers=new ArrayList<>();
         passengers=readFile();
-        
+        for (Passenger p: passengers) {
+            scheduler.makeFloorRequest(p);
+        }
     }
     public ArrayList<Passanger> readFile() {
         String time;
