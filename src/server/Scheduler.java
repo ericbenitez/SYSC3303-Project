@@ -5,7 +5,7 @@ import java.util.Queue;
 
 public class Scheduler {
 	private boolean inProcess, isAvailable, onDestination;  		// true means elevator is in process, initially is false until it gets request from floor system
-	private Queue<Object> floorRequests; 							//requests from floor system
+	private Queue<Passenger> floorRequests; 							//requests from floor system
 	private int elevatorLocation, destination;						//where elevator is and where is going to
 	
 	public Scheduler () {
@@ -20,7 +20,7 @@ public class Scheduler {
 
 	//function receives request from floor system
 
-	public synchronized void makeFloorRequest(Object request) {
+	public synchronized void makeFloorRequest(Passenger request) {
 		
 		//if is not available is true means elevator is in process and floor has to wait
 		while (!isAvailable) {
@@ -38,6 +38,7 @@ public class Scheduler {
 		isAvailable=false;
 		inProcess=true;
 		onDestination=false;
+		System.out.println(floorRequests);
 		notifyAll();
 
 
@@ -105,7 +106,12 @@ public class Scheduler {
 	public boolean isOnDestinatiom() {
 		return onDestination;
 	}
-	
-	
-	
+
+	// returns true when elevator is available
+	public boolean isAvailable() {
+		return isAvailable;
+	}
+
+
+
 }

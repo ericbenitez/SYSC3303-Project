@@ -2,50 +2,76 @@ package server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-
+/**
+ * Class for floor Subsystem
+ * */
 public class FloorSubsystem implements Runnable{
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
+/**
+ * Default constructor that creates a Floor Subsystem and contains a Scheduler as a shared object
+ * @param scheduler is a shared object used between elevator and floor
+* */
     public FloorSubsystem(Scheduler scheduler){
         this.scheduler=scheduler;
 
     }
-
+/**
+ * Method that is called when the method start() is invoked,
+ * it will read the input from a file and if the elevator is avalaibkle it will send the first passenger over to the scheduler for the elevator
+ * when the elevator arrives at the persons destionation, the floor will output a update
+ *
+ * */
     @Override
     public void run() {
-        ArrayList<Passanger> passengers=new ArrayList<>();
+        Queue<Passenger> passengers=new LinkedList<>();
         passengers=readFile();
-        for (Passenger p: passengers) {
-            scheduler.makeFloorRequest(p);
+        while(true){
+            if(scheduler.isOnDestinatiom()){
+                System.out.println("Passenger has reached its destination");
+            }
+            if(scheduler.isAvailable()) {
+                scheduler.makeFloorRequest(passengers.remove());
+            }
+
         }
+
     }
-    public ArrayList<Passanger> readFile() {
+    /**
+     * Method responsible for reading the input file and saving it into a queue of passsengers that will be sent to the scheduler
+     * @return Queue<Passenger> object that contains a list of passengers
+     *
+     * */
+    public Queue<Passenger> readFile() {
         String time;
         int floor;
         String floorButton;
         int carButton;
         String[] lines;
-        ArrayList<Passanger> passengerList = new ArrayList<>();
+        Queue<Passenger> passengerList = new LinkedList<>();
         try {
-            File myObj = new File("inputFile.txt");
-            Scanner floorFile = new Scanner(myObj);
+            Scanner floorFile = new Scanner(new File("src/input.txt"));
 
             while (floorFile.hasNextLine()) {
-                lines = floorFile.nextLine().split(",");
+
+                lines = floorFile.nextLine().split(" ");
+
                 time = lines[0];
                 floor = Integer.parseInt(lines[1]);
                 floorButton = lines[2];
                 carButton = Integer.parseInt(lines[3]);
-                passengerList.add(new Passanger(time, floor, floorButton, carButton));
+                passengerList.add(new Passenger(time, floor, floorButton, carButton));
 
             }
             floorFile.close();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Error");
+            e.printStackTrace();
         }
+
         return passengerList;
     }
+
 }
