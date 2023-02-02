@@ -32,8 +32,15 @@ public class Elevator implements Runnable{
         return doors;
     }
 
-    //Constructor method sets the chosen configuration for the system
-    // Future iterations buttonPressed may be a list for multiple floors chosen
+    /**
+     * Constructor method sets the chosen configuration for the system
+     * Future iterations buttonPressed may be a list for multiple floors chosen
+     *
+     * @param scheduler what the elevator will communicate with
+     * @param highestFloor the size of the building with the highest floor
+     * @param buttonPressed which button has been pressed within elevator
+     *
+     */
     public Elevator(Scheduler scheduler, int highestFloor, int buttonPressed){
         numberOfFloors = highestFloor;
         buttons = new boolean[numberOfFloors];
