@@ -36,7 +36,9 @@ public class FloorSubsystem implements Runnable{
                 System.out.println("Passenger queued");
                 scheduler.makeFloorRequest(passengers.remove());
             }
-
+            if(scheduler.isOnDestinatiom()&&passengers.isEmpty()){
+                System.exit(0);
+            }
         }
 
     }
